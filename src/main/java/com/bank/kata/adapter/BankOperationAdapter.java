@@ -2,17 +2,23 @@ package com.bank.kata.adapter;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.bank.kata.domain.Transaction;
 import com.bank.kata.domain.Transaction.Type;
 import com.bank.kata.port.BankOperationPort;
 
+
 public class BankOperationAdapter implements BankOperationPort {
 
+	
+	private static final Logger LOG =  LoggerFactory.getLogger(BankOperationAdapter.class);
+	
 	private Transaction transaction;
 	
-	public BankOperationAdapter(Transaction transaction) {
+	public BankOperationAdapter(final Transaction transaction) {
 		this.transaction = transaction;
 	}
 	
@@ -23,12 +29,20 @@ public class BankOperationAdapter implements BankOperationPort {
 		}
 		
 		transaction.addRecord(Type.DEPOSIT,LocalDateTime.now(), amount);
-
+		
+        LOG.info("DEPOSIT Amount = " + amount + " ,Balance = " + transaction.getBalance());
 	}
 
 	@Override
 	public void withdraw(Double amount) {
-		// TODO Auto-generated method stub
+		
+		if(Objects.isNull(amount) || amount < 0 || amount > transaction.getBalance()) {
+			throw new IllegalArgumentException("Insuffisant Fund");
+		}
+		
+		transaction.addRecord(Type.WITHDRAW,LocalDateTime.now(),  -amount);
+		
+		LOG.info("WithDraw Amount = " + -amount + " ,Balance = " + transaction.getBalance());
 		
 	}
 
