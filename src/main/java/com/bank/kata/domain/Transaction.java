@@ -1,6 +1,7 @@
 package com.bank.kata.domain;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Transaction {
@@ -9,8 +10,8 @@ public class Transaction {
 	
 	private List<BankRecord> listRecord;
 	
-	public Transaction(List<BankRecord> listRecord) {
-		this.listRecord = listRecord;
+	public Transaction() {
+		this.listRecord = new ArrayList();
 	}
 	
 	public void addRecord(Type type,LocalDateTime dateOp , Double amount) {
